@@ -3,6 +3,7 @@ package ir.ac.kntu.kilid.models;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Setter
 public class User {
     @Id
+    @GeneratedValue
     private Long id;
     private String username;
     private String password;

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Builder
 @Entity
@@ -12,12 +13,11 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Province {
-
+public class History {
     @Id
     @GeneratedValue
     private Long id;
-
-    private String name;
-
+    private String userId;
+    private String query;
+    private final Date creation = new Date();
 }

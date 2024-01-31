@@ -2,10 +2,7 @@ package ir.ac.kntu.kilid.models;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Builder
 @Entity
@@ -15,10 +12,10 @@ import javax.persistence.OneToOne;
 @Setter
 public class City {
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
-    @OneToOne
-    @JoinColumn(name = "provice")
+    @OneToOne(cascade = CascadeType.ALL)
     private Province province;
 
 

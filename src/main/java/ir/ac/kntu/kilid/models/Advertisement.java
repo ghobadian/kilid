@@ -1,10 +1,11 @@
 package ir.ac.kntu.kilid.models;
 
+import ir.ac.kntu.kilid.models.input.AdvertisementInputDTO;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Builder
 @Entity
@@ -14,25 +15,40 @@ import javax.persistence.OneToOne;
 @Setter
 public class Advertisement {
     @Id
+    @GeneratedValue
     private Long id;
+    private String code;
     private String title;
+    private AdvertisementType advertisementType;
+    private int price;
     private int mortgage;
+    private boolean fullMortgage;
+    private boolean negotiable;
     private int rent;
-    private int buy;
-    private byte[] main_image;
-    private byte[] image2;
-    private byte[] image3;
-    private byte[] image4;
-    private byte[] image5;
     private String description;
-    private int exchange;
-    private int collaborative;
-    private boolean convertable;
-    private boolean preSell;
-    private int administrativePosition;
-    private int borrower;
-    private boolean newlyBuilt;
-    private int inProportionateShare;
-    @OneToOne
-    private File file;
+    private UseType useType;
+    private String address;
+    private int area;
+    private int year;
+    private int rooms;
+    private Date creationTime;
+    @ElementCollection(targetClass = HouseFeature.class)
+    private List<HouseFeature> houseFeatures;
+    @OneToOne(cascade = CascadeType.ALL)
+    private District district;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "estate_agency_id")
+    private EstateAgency estateAgency;
+
+
+    public static Advertisement from(AdvertisementInputDTO input) {
+        return Advertisement.builder()
+                .useType(input.getUseType())
+                .area(input.getArea())
+                .negotiable(input.isNegotiable())
+                .fullMortgage(input.isFullMortgage())
+                .useType(input.getUseType())
+                .advertisementType(input.getAdvertisementType())
+                .build();
+    }
 }
