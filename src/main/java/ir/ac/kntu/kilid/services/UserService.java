@@ -2,6 +2,7 @@ package ir.ac.kntu.kilid.services;
 
 import ir.ac.kntu.kilid.dao.UserRepository;
 import ir.ac.kntu.kilid.models.User;
+import ir.ac.kntu.kilid.models.input.UserInputDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,8 @@ import static ir.ac.kntu.kilid.dao.TokenRepository.TOKEN_REPOSITORY;
 public class UserService {
     private final UserRepository userRepository;
 
-    public List<User> list(int page, int number) {
+    public List<User> list() {
         return userRepository.findAll();
-    }
-
-    public User create(String username, String password, String firstname, String lastName, String email) {
-        User user = User.builder().username(username).password(password)//todo encode passwords
-                .firstName(firstname).lastName(lastName).creationTime(new Date()).email(email).build();
-        return userRepository.save(user);
     }
 
     public User read(Long id) {
@@ -62,12 +57,28 @@ public class UserService {
         log.info("User with id " + id + " deleted");
     }
 
-    public String login(Long id) {
-        String token = UUID.randomUUID().toString();
-        return TOKEN_REPOSITORY.put(id, token);
-    }
-
     public void logout(String token) {
         TOKEN_REPOSITORY.inverse().remove(token);
+    }
+
+    public User create(UserInputDTO input) {
+        User user = User.builder().username(input.getUsername())
+                .password(input.getPassword())
+                .firstName(input.getFirstName())
+                .lastName(input.getLastName())
+                .creationTime(new Date())
+                .email(input.getEmail()).build();
+        return userRepository.save(user);
+    }
+
+    public String login(String username, String password) {
+        if (!userRepository.existsByUsernameAndPassword(username, password)) {
+            return "get the hell outta here";
+        }
+
+        User user = userRepository.findByUsername(username).orElseThrow();
+        String token = UUID.randomUUID().toString();
+        return TOKEN_REPOSITORY.put(user.getId(), token);
+
     }
 }

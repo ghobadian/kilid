@@ -19,6 +19,4 @@ public class EstateAgencyInputDTO {
     private String managerPhoneNumber;
     @NotNull
     private String password;
-    @NotNull
-    private String phoneNumber;
 }

@@ -1,6 +1,7 @@
 package ir.ac.kntu.kilid.controllers;
 
 import ir.ac.kntu.kilid.models.User;
+import ir.ac.kntu.kilid.models.input.UserInputDTO;
 import ir.ac.kntu.kilid.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,21 +15,20 @@ public class UserController {
     private final UserService service;
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/user/register")
-    private User create(@RequestParam String username, @RequestParam String password, @RequestParam String name,
-                        @RequestParam String phone, @RequestParam String nationalId) {
-        return service.create(username, password, name, phone, nationalId);
+    private User create(@RequestBody UserInputDTO input) {
+        return service.create(input);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/user/list")
-    private List<User> list(@RequestHeader String token, @RequestParam int page, @RequestParam int number) {
-        return service.list(page, number);
+    private List<User> list() {
+        return service.list();
     }
 
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/user/{id}")
-    private User read(@PathVariable Long id, @RequestHeader String token) {
+    private User read(@PathVariable Long id) {
         return service.read(id);
     }
 
@@ -43,15 +43,15 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/user")
-    private void delete(@PathVariable Long id, @RequestHeader String token) {
+    private void delete(@PathVariable Long id) {
         service.delete(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/user/login")
-    public String login(@RequestParam Long id,
+    public String login(@RequestParam String username,
                         @RequestParam String password) {
-        return service.login(id);
+        return service.login(username, password);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

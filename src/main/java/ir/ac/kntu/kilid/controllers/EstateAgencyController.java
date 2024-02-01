@@ -16,7 +16,7 @@ public class EstateAgencyController {
     private final EstateAgencyService service;
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/agency/")
-    public EstateAgency create(@RequestParam String token, @RequestParam EstateAgencyInputDTO input) {
+    public EstateAgency create(@RequestParam String token, @RequestBody EstateAgencyInputDTO input) {
         return service.create(token, input);
     }
 

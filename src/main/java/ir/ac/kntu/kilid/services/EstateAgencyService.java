@@ -19,7 +19,7 @@ public class EstateAgencyService {
     public EstateAgency create(String token, EstateAgencyInputDTO input) {
         return estateAgencyRepository.save(EstateAgency.builder()
                 .name(input.getPersianName())
-                        .phoneNumber(input.getPhoneNumber())
+                        .phoneNumber(input.getPhone())
                         .numberOfEmployees(input.getNumberOfEmployees())
                         .city(cityRepository.findByName(input.getCity()).orElseThrow())
                         .password(input.getPassword())
