@@ -23,7 +23,7 @@ public class EstateAgencyService {
                         .numberOfEmployees(input.getNumberOfEmployees())
                         .city(cityRepository.findByName(input.getCity()).orElseThrow())
                         .password(input.getPassword())
-                        .manager(managerRepository.findById(TokenRepository.TOKEN_REPOSITORY.inverse().get(token))
+                        .manager(managerRepository.findByUser_Username(TokenRepository.TOKEN_REPOSITORY.inverse().get(token))
                                 .orElseThrow())
                 .build());
     }

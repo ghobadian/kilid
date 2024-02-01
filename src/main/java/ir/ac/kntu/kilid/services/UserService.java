@@ -78,7 +78,7 @@ public class UserService {
 
         User user = userRepository.findByUsername(username).orElseThrow();
         String token = UUID.randomUUID().toString();
-        return TOKEN_REPOSITORY.put(user.getId(), token);
-
+        TOKEN_REPOSITORY.put(username, token);
+        return token;
     }
 }
