@@ -15,8 +15,8 @@ public class DistrictController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/district/")
-    public District add(@RequestParam String cityName, @RequestParam Long cityId) {
-        return districtRepository.save(District.builder().name(cityName)
+    public District add(@RequestParam String districtName, @RequestParam Long cityId) {
+        return districtRepository.save(District.builder().name(districtName)
                 .city(cityRepository.findById(cityId).orElseThrow()).build());
     }
 }

@@ -3,11 +3,14 @@ package ir.ac.kntu.kilid.services;
 import ir.ac.kntu.kilid.dao.AdvertisementRepository;
 import ir.ac.kntu.kilid.dao.DistrictRepository;
 import ir.ac.kntu.kilid.models.Advertisement;
+import ir.ac.kntu.kilid.models.AdvertisementOutputDTO;
 import ir.ac.kntu.kilid.models.AdvertisementType;
+import ir.ac.kntu.kilid.models.Manager;
 import ir.ac.kntu.kilid.models.filters.AdvertisementFilter;
 import ir.ac.kntu.kilid.models.filters.Filter;
 import ir.ac.kntu.kilid.models.filters.QueryOperator;
 import ir.ac.kntu.kilid.models.input.AdvertisementInputDTO;
+import ir.ac.kntu.kilid.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -25,13 +28,17 @@ public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
     private final DistrictRepository districtRepository;
+    private final TokenUtils tokenUtils;
     private final SecureRandom random = new SecureRandom();
-    public Advertisement create(AdvertisementInputDTO input) {
+    public AdvertisementOutputDTO create(String token, AdvertisementInputDTO input) {
         Advertisement advertisement = Advertisement.from(input);
         advertisement.setDistrict(districtRepository.findByName(input.getDistrict()).orElseThrow());
         advertisement.setCode(generateCode());
+        Manager manager = tokenUtils.getManager(token);
+        advertisement.setEstateAgency(manager.getEstateAgency());
         setFeeBasedOnAdvertisementType(input, advertisement);
-        return advertisementRepository.save(advertisement);
+        Advertisement ad = advertisementRepository.save(advertisement);
+        return AdvertisementOutputDTO.from(ad);
     }
 
     private String generateCode() {
@@ -51,12 +58,12 @@ public class AdvertisementService {
         }
     }
 
-    public List<Advertisement> search(String address) {
-        return advertisementRepository.searchAdvertisements(address);
+    public List<AdvertisementOutputDTO> search(String address) {
+        return advertisementRepository.searchAdvertisements(address).stream().map(AdvertisementOutputDTO::from).collect(Collectors.toList());
     }
 
-    public List<Advertisement> findAllBySpecification(AdvertisementFilter input) {
-        return advertisementRepository.findAll(getSpecifications(getFilters(input)));
+    public List<AdvertisementOutputDTO> findAllBySpecification(AdvertisementFilter input) {
+        return advertisementRepository.findAll(getSpecifications(getFilters(input))).stream().map(AdvertisementOutputDTO::from).collect(Collectors.toList());
     }
 
     private Specification<Advertisement> createSpecification(Filter input) {
@@ -125,6 +132,7 @@ public class AdvertisementService {
 
         if (input.getYear() != null) {
             filters.add(Filter.builder()
+                    .field("year")
                     .operator(QueryOperator.EQUALS)
                     .value(input.getYear().toString())
                     .build());
@@ -132,6 +140,7 @@ public class AdvertisementService {
 
         if (input.getArea() != null) {
             filters.add(Filter.builder()
+                            .field("area")
                     .operator(QueryOperator.EQUALS)
                     .value(input.getArea().toString())
                     .build());
@@ -139,13 +148,39 @@ public class AdvertisementService {
 
         if (input.getRooms() != null) {
             filters.add(Filter.builder()
+                            .field("rooms")
                     .operator(QueryOperator.EQUALS)
                     .value(input.getRooms().toString())
                     .build());
         }
 
+        if (input.getPrice() != null) {
+            filters.add(Filter.builder()
+                            .field("price")
+                    .operator(QueryOperator.EQUALS)
+                    .value(input.getPrice().toString())
+                    .build());
+        }
+
+        if (input.getRent() != null) {
+            filters.add(Filter.builder()
+                    .field("rent")
+                    .operator(QueryOperator.EQUALS)
+                    .value(input.getRent().toString())
+                    .build());
+        }
+
+        if (input.getMortgage() != null) {
+            filters.add(Filter.builder()
+                    .field("mortgage")
+                    .operator(QueryOperator.EQUALS)
+                    .value(input.getMortgage().toString())
+                    .build());
+        }
+
         if (input.getUseType() != null) {
             filters.add(Filter.builder()
+                            .field("useType")
                     .operator(QueryOperator.EQUALS)
                     .value(input.getUseType().toString())
                     .build());
@@ -153,6 +188,7 @@ public class AdvertisementService {
 
         if (input.getHouseFeatures() != null) {
             filters.add(Filter.builder()
+                            .field("houseFeatures")
                     .operator(QueryOperator.IN)
                     .values(input.getHouseFeatures().stream().map(Enum::toString).collect(Collectors.toList()))
                     .build());
@@ -162,5 +198,8 @@ public class AdvertisementService {
     }
 
 
-
+    public AdvertisementOutputDTO info(Long id) {
+        Advertisement advertisement = advertisementRepository.findById(id).orElseThrow();
+        return AdvertisementOutputDTO.from(advertisement);
+    }
 }

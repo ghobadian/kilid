@@ -3,19 +3,19 @@ package ir.ac.kntu.kilid.services;
 import ir.ac.kntu.kilid.dao.UserRepository;
 import ir.ac.kntu.kilid.models.User;
 import ir.ac.kntu.kilid.models.input.UserInputDTO;
+import ir.ac.kntu.kilid.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static ir.ac.kntu.kilid.dao.TokenRepository.TOKEN_REPOSITORY;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final TokenUtils tokenUtils;
 
     public List<User> list() {
         return userRepository.findAll();
@@ -58,7 +58,8 @@ public class UserService {
     }
 
     public void logout(String token) {
-        TOKEN_REPOSITORY.inverse().remove(token);
+        tokenUtils.removeToken(token);
+
     }
 
     public User create(UserInputDTO input) {
@@ -76,8 +77,8 @@ public class UserService {
             return "get the hell outta here";
         }
 
-        String token = UUID.randomUUID().toString();
-        TOKEN_REPOSITORY.put(username, token);
+        String token = tokenUtils.generateToken();
+        tokenUtils.save(username, token);
         return token;
     }
 }

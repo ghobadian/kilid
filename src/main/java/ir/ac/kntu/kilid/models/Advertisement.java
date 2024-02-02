@@ -49,6 +49,8 @@ public class Advertisement {
                 .fullMortgage(input.isFullMortgage())
                 .useType(input.getUseType())
                 .advertisementType(input.getAdvertisementType())
+                .title(input.getTitle())
+                .description(input.getDescription())
                 .build();
     }
 }

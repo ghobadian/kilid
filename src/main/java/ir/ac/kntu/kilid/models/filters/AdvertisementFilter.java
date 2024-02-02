@@ -14,6 +14,9 @@ public class AdvertisementFilter {
     Integer rooms;
     Integer area;
     Integer year;
+    Integer price;
+    Integer rent;
+    Integer mortgage;
     List<HouseFeature> houseFeatures;
 
 }

@@ -6,7 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class AdvertisementInputDTO {
-    private String District;
+    private String title;
+    private String description;
+    private String district;
     private int area;
     private int price;
     private boolean isNegotiable;
