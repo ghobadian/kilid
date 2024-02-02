@@ -25,10 +25,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
-    public User update(String firstName, String newUsername, String newPassword, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
-        updateName(firstName, user);
-        updateUsername(newUsername, username, user);
+    public User update(String newFirstName, String newUsername, String newPassword, Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        updateName(newFirstName, user);
+        updateUsername(newUsername, user);
         updatePassword(newPassword, user);
         return userRepository.save(user);
     }
@@ -39,8 +39,8 @@ public class UserService {
         }
     }
 
-    private void updateUsername(String newUsername, String username, User user) {
-        if (newUsername !=null && !userRepository.existsByUsername(username)) {
+    private void updateUsername(String newUsername, User user) {
+        if (newUsername !=null && !userRepository.existsByUsername(user.getUsername())) {
             user.setUsername(newUsername);
         }
     }

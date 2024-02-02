@@ -3,6 +3,7 @@ package ir.ac.kntu.kilid.controllers;
 import ir.ac.kntu.kilid.models.User;
 import ir.ac.kntu.kilid.models.input.UserInputDTO;
 import ir.ac.kntu.kilid.services.UserService;
+import ir.ac.kntu.kilid.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
+    private final TokenUtils tokenUtils;
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/user/register")
     private User create(@RequestBody UserInputDTO input) {
@@ -33,12 +35,11 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/user")
+    @PutMapping("/user/{id}")
     private User update(@RequestParam(required = false) String firstName,
                         @RequestParam(required = false) String newUsername,
-                        @RequestParam(required = false) String newPassword,
-                        @RequestHeader String token) {
-        return service.update(firstName, newUsername, newPassword , token);
+                        @RequestParam(required = false) String newPassword, @PathVariable Long id) {
+        return service.update(firstName, newUsername, newPassword , id);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
