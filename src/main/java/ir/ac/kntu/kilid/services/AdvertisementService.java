@@ -93,11 +93,11 @@ public class AdvertisementService {
     }
 
     private Object castToRequiredType(Class fieldType, String value) {
-        if(fieldType.isAssignableFrom(Double.class)) {
+        if(fieldType.isAssignableFrom(Double.class) || fieldType.getName().equals("double")) {
             return Double.valueOf(value);
-        } else if(fieldType.isAssignableFrom(Integer.class)) {
+        } else if(fieldType.isAssignableFrom(Integer.class) || fieldType.getName().equals("int")) {
             return Integer.valueOf(value);
-        } else if(Enum.class.isAssignableFrom(fieldType)) {
+        } else if(Enum.class.isAssignableFrom(fieldType) || fieldType.getName().equals("enum")) {
             return Enum.valueOf(fieldType, value);
         }
         return null;
@@ -183,14 +183,6 @@ public class AdvertisementService {
                             .field("useType")
                     .operator(QueryOperator.EQUALS)
                     .value(input.getUseType().toString())
-                    .build());
-        }
-
-        if (input.getHouseFeatures() != null) {
-            filters.add(Filter.builder()
-                            .field("houseFeatures")
-                    .operator(QueryOperator.IN)
-                    .values(input.getHouseFeatures().stream().map(Enum::toString).collect(Collectors.toList()))
                     .build());
         }
 

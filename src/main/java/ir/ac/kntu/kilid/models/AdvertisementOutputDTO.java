@@ -2,12 +2,16 @@ package ir.ac.kntu.kilid.models;
 
 import ir.ac.kntu.kilid.models.output.AddressOutputDTO;
 import ir.ac.kntu.kilid.models.output.EstateAgencyOutputDTO;
-import lombok.Builder;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class AdvertisementOutputDTO {
     private String code;
     private String title;

@@ -10,8 +10,11 @@ public class AdvertisementInputDTO {
     private String description;
     private String district;
     private int area;
+    private int year;
+    private int rooms;
+    private String fullAddress;
     private int price;
-    private boolean isNegotiable;
+    private boolean negotiable;
     private int mortgage;
     private int rent;
     private boolean fullMortgage;

@@ -51,6 +51,9 @@ public class Advertisement {
                 .advertisementType(input.getAdvertisementType())
                 .title(input.getTitle())
                 .description(input.getDescription())
+                .rooms(input.getRooms())
+                .year(input.getYear())
+                .address(input.getFullAddress())
                 .build();
     }
 }

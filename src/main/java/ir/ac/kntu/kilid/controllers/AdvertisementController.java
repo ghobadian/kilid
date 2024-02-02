@@ -28,7 +28,7 @@ public class AdvertisementController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/add/search_filtered")
+    @PostMapping("/add/search_filtered")
     public List<AdvertisementOutputDTO> findAllBySpecification(@RequestBody AdvertisementFilter input) {
         return service.findAllBySpecification(input);
     }

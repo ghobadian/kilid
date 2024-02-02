@@ -1,13 +1,17 @@
 package ir.ac.kntu.kilid.models.output;
 
 import ir.ac.kntu.kilid.models.District;
-import lombok.Builder;
+import lombok.*;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class AddressOutputDTO {
-    String city;
-    String district;
-    String province;
+    private String city;
+    private String district;
+    private String province;
     public static AddressOutputDTO from(District district) {
         return AddressOutputDTO.builder()
                 .city(district.getCity().getName())
