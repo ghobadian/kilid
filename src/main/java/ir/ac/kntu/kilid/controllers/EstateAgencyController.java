@@ -18,8 +18,8 @@ public class EstateAgencyController {
     private final EstateAgencyService service;
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/agency/")
-    public EstateAgencyOutputDTO create(@RequestParam String token, @RequestBody EstateAgencyInputDTO input) {
-        return service.create(token, input);
+    public EstateAgencyOutputDTO create(@RequestBody EstateAgencyInputDTO input) {
+        return service.create(input);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

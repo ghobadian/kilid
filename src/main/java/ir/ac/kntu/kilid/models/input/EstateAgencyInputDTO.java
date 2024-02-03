@@ -12,6 +12,7 @@ public class EstateAgencyInputDTO {
     @NotNull
     private String city;
     private Integer numberOfEmployees;
+    private String managerUsername;
     @NotNull
     private String managerFirstName;
     private String managerLastName;

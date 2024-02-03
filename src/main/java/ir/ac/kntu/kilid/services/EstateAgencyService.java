@@ -22,10 +22,9 @@ public class EstateAgencyService {
     private final EstateAgencyRepository estateAgencyRepository;
     private final CityRepository cityRepository;
     private final AdvertisementRepository advertisementRepository;
-    private final TokenUtils tokenUtils;
     private final ManagerRepository managerRepository;
-    public EstateAgencyOutputDTO create(String token, EstateAgencyInputDTO input) {
-        Manager manager = tokenUtils.getManager(token);
+    public EstateAgencyOutputDTO create(EstateAgencyInputDTO input) {
+        Manager manager = managerRepository.findByUser_Username(input.getManagerUsername()).orElseThrow();
         EstateAgency agency = estateAgencyRepository.save(EstateAgency.builder()
                 .name(input.getPersianName())
                 .phoneNumber(input.getPhone())
