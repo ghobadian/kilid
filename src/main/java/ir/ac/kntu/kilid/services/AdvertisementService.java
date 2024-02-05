@@ -2,6 +2,7 @@ package ir.ac.kntu.kilid.services;
 
 import ir.ac.kntu.kilid.dao.AdvertisementRepository;
 import ir.ac.kntu.kilid.dao.DistrictRepository;
+import ir.ac.kntu.kilid.dao.ManagerRepository;
 import ir.ac.kntu.kilid.models.Advertisement;
 import ir.ac.kntu.kilid.models.AdvertisementOutputDTO;
 import ir.ac.kntu.kilid.models.AdvertisementType;
@@ -10,7 +11,6 @@ import ir.ac.kntu.kilid.models.filters.AdvertisementFilter;
 import ir.ac.kntu.kilid.models.filters.Filter;
 import ir.ac.kntu.kilid.models.filters.QueryOperator;
 import ir.ac.kntu.kilid.models.input.AdvertisementInputDTO;
-import ir.ac.kntu.kilid.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
     private final DistrictRepository districtRepository;
-    private final TokenUtils tokenUtils;
+    private final ManagerRepository managerRepository;
     private final SecureRandom random = new SecureRandom();
-    public AdvertisementOutputDTO create(String token, AdvertisementInputDTO input) {
+    public AdvertisementOutputDTO create(String managerUsername, AdvertisementInputDTO input) {
         Advertisement advertisement = Advertisement.from(input);
         advertisement.setDistrict(districtRepository.findByName(input.getDistrict()).orElseThrow());
         advertisement.setCode(generateCode());
-        Manager manager = tokenUtils.getManager(token);
+        Manager manager = managerRepository.findByUser_Username(managerUsername).orElseThrow();
         advertisement.setEstateAgency(manager.getEstateAgency());
         setFeeBasedOnAdvertisementType(input, advertisement);
         Advertisement ad = advertisementRepository.save(advertisement);

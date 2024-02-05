@@ -23,8 +23,8 @@ public class AdvertisementController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/add/create")
-    public AdvertisementOutputDTO create(@RequestParam String token, @RequestBody AdvertisementInputDTO input) {
-        return service.create(token, input);
+    public AdvertisementOutputDTO create(@RequestParam String managerUsername, @RequestBody AdvertisementInputDTO input) {
+        return service.create(managerUsername, input);
     }
 
     @ResponseStatus(HttpStatus.OK)
